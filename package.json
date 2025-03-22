@@ -1,0 +1,27 @@
+{
+  "name": "serialization",
+  "version": "1.0.0",
+  "description": "init",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djak7411/serialization.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/djak7411/serialization/issues"
+  },
+  "homepage": "https://github.com/djak7411/serialization#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.3",
+    "mocha": "^11.1.0",
+    "ts-loader": "~9.5.2",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "~5.2.0"
+  }
+}
