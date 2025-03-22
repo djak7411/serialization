@@ -4,7 +4,7 @@
   "description": "init",
   "main": "index.js",
   "scripts": {
-    "test": "ts-mocha -p src/tsconfig.json tests/test.tss",
+    "test": "ts-mocha -p tsconfig.json tests/tests.ts",
     "start": "npx webpack serve"
   },
   "repository": {
