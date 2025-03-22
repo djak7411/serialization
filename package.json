@@ -4,7 +4,7 @@
   "description": "init",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ts-mocha -p src/tsconfig.json tests/test.tss",
     "start": "npx webpack serve"
   },
   "repository": {
@@ -18,10 +18,15 @@
   },
   "homepage": "https://github.com/djak7411/serialization#readme",
   "devDependencies": {
-    "html-webpack-plugin": "^5.6.3",
-    "mocha": "^11.1.0",
+    "@types/expect": "~24.3.2",
+    "@types/mocha": "~10.0.10",
+    "html-webpack-plugin": "~5.6.3",
+    "mocha": "~11.1.0",
     "ts-loader": "~9.5.2",
-    "webpack-cli": "^6.0.1",
+    "ts-mocha": "~11.1.0",
+    "ts-node": "~10.9.2",
+    "tsconfig-paths": "~4.2.0",
+    "webpack-cli": "~6.0.1",
     "webpack-dev-server": "~5.2.0"
   }
 }
