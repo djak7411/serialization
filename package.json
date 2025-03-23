@@ -16,10 +16,12 @@
   "bugs": {
     "url": "https://github.com/djak7411/serialization/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/djak7411/serialization#readme",
   "devDependencies": {
     "@types/expect": "~24.3.2",
     "@types/mocha": "~10.0.10",
+    "babel": "^6.23.0",
     "html-webpack-plugin": "~5.6.3",
     "mocha": "~11.1.0",
     "ts-loader": "~9.5.2",

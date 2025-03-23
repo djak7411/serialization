@@ -6,7 +6,7 @@ export function deserialize(str: string) : number[] {
     return str.split('\s').map(el => parseInt(el));
 }
 
-export function createArray(len: number, max: number, min: number, step: number): number[] {
+export function createArray(len: number, max: number, min: number, step: number = 1, needRandom: boolean = true): number[] {
     if(min < 1){
         alert('min should be over than 0, min = 1');
         min = 1;
@@ -24,8 +24,25 @@ export function createArray(len: number, max: number, min: number, step: number)
     }
 
     const generatedNumbers : number[] = [];
+    if(needRandom){
+        for(let i : number = 0; i < len; i += step){
+            generatedNumbers.push(Math.floor(Math.random() * (max - min + 1) + min));
+        }
+    }else{
+        for(let i : number = min; i <= max; i += 1){
+            generatedNumbers.push(i);
+        } 
+    }
+
+    return generatedNumbers;
+}
+
+export function createArrayCertain(countDigits: number, step: number): number[] {
+    const min = 1;
+    const max = 300;
+    const generatedNumbers : number[] = [];
     
-    for(let i : number = 0; i < len; i += step){
+    for(let i : number = 0; i < countDigits * 100; i += step){
         generatedNumbers.push(Math.floor(Math.random() * (max - min + 1) + min));
     }
 
