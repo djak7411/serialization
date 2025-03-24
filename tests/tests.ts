@@ -2,7 +2,7 @@
 // граничные - все числа 1 знака, все числа из 2х знаков, все числа из 3х знаков, 
 // каждого числа по 3 - всего чисел 900.;
 import * as assert from 'assert';
-import { serialize, deserialize, createArray, createArrayCertain } from "../src/app";
+import { serialize, deserialize, createArray } from "../src/utils";
 
 function isCompressionOverHalf(arr: number[]) : boolean {
     const serializedArr: string = serialize(arr);

@@ -1,50 +1,66 @@
-export function serialize(arr: number[]) : string{
-    return arr.join('\s');
-}
+import { createArray, deserialize, serialize } from './utils';
 
-export function deserialize(str: string) : number[] {
-    return str.split('\s').map(el => parseInt(el));
-}
+const addCSS = (css: any) => document.head.appendChild(document.createElement("style")).innerHTML = css;
 
-export function createArray(len: number, max: number, min: number, step: number = 1, needRandom: boolean = true): number[] {
-    if(min < 1){
-        alert('min should be over than 0, min = 1');
-        min = 1;
-    }
-
-    if(max > 1000){
-        alert('max should be less than 1000, max = 1000');
-    }
-    
-    if(max < min){
-        alert('max is less than min, swapping max-min');
-        min += max;
-        max = min - max;
-        min -= max;
-    }
-
-    const generatedNumbers : number[] = [];
-    if(needRandom){
-        for(let i : number = 0; i < len; i += step){
-            generatedNumbers.push(Math.floor(Math.random() * (max - min + 1) + min));
+addCSS(`
+        pre {
+            margin: 16px;
+             word-break: break-all;
+             max-width: 100%;
         }
-    }else{
-        for(let i : number = min; i <= max; i += 1){
-            generatedNumbers.push(i);
-        } 
-    }
+        div {
+            display: flex;
+            padding: 8px;
+            flex-direction: column;
+        }
+        button{
+            height: 42px;
+        }
+    `);
 
-    return generatedNumbers;
-}
+const htmlTemplate = `
+        <div class="inputs-container">
+            <p>
+                Need step over 3? 
+                <input type="checkbox" id="step-three"/>
+            </p>
+            <p>
+                Numbers count: 
+                <input type="number" id="count" min="1" max="1000" />
+            </p>
+            <button id="serialize">Serialize!</button>
+        </div>
+        <hr/>
+        Source: <pre class="source-row"></pre>
+        Serialized: <pre class="serialized-row"></pre>
+        Deserialized: <pre class="deserialized-row"></pre>
+        <hr/>
+    `;
 
-export function createArrayCertain(countDigits: number, step: number): number[] {
-    const min = 1;
-    const max = 300;
-    const generatedNumbers : number[] = [];
+document.addEventListener('DOMContentLoaded', () => {
+    const arr: number[] = createArray(9, 9, 1, 1);
+
+    document.body.innerHTML = htmlTemplate;
+
+    document.querySelector('#serialize')?.addEventListener('click', () => {
+        const pres: NodeListOf<HTMLPreElement> = document.querySelectorAll('pre');
+        const source: HTMLElement = pres[0];
+        const serialized: HTMLElement = pres[1];
+        const deserialized: HTMLElement = pres[2];
+        const numbersCountInput: HTMLInputElement = document.querySelector('#count') as HTMLInputElement;
+        const isStepOverThree: boolean = (document.querySelector('#step-three') as HTMLInputElement).checked;
+
+        console.log(isStepOverThree);
+        let arr: number[] = [];
+        if(!isStepOverThree){
+            arr =  createArray(parseInt(numbersCountInput!.value), 300, 1);
+        }else {
+            arr = createArray(900, 999, 1, 3, false);
+        }
+        const serializedData = serialize(arr); 
     
-    for(let i : number = 0; i < countDigits * 100; i += step){
-        generatedNumbers.push(Math.floor(Math.random() * (max - min + 1) + min));
-    }
-
-    return generatedNumbers;
-}
+        source.innerHTML = arr.toString();
+        serialized.innerHTML = serializedData;
+        deserialized.innerHTML = deserialize(serializedData).toString();
+    });
+});
