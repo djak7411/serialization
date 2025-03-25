@@ -7,7 +7,10 @@ import { serialize, deserialize, createArray } from "../src/utils";
 function isCompressionOverHalf(arr: number[]) : boolean {
     const serializedArr: string = serialize(arr);
 
-    return (serializedArr.length / arr.length * 100) <= 50;
+    console.log(`compression: ${(100 * serializedArr.length) / arr.length}`);
+
+    //return (serializedArr.length / arr.length * 100) <= 50;
+    return (100 * serializedArr.length) / arr.length <= 50;
 }
 
 describe('base', () => {

@@ -50,12 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const numbersCountInput: HTMLInputElement = document.querySelector('#count') as HTMLInputElement;
         const isStepOverThree: boolean = (document.querySelector('#step-three') as HTMLInputElement).checked;
 
-        console.log(isStepOverThree);
         let arr: number[] = [];
         if(!isStepOverThree){
             arr =  createArray(parseInt(numbersCountInput!.value), 300, 1);
         }else {
-            arr = createArray(900, 999, 1, 3, false);
+            arr = createArray(900, 300, 1, 3, false);
         }
         const serializedData = serialize(arr); 
     
