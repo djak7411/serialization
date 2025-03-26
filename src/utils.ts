@@ -4,6 +4,23 @@ interface IPreserialized extends Array<string[][]>{
     2: string[][]
 }
 
+const symMap : object = {
+    '!': 0,
+    '$': 0,
+    '%': 10,
+    '^': 20,
+    '&': 30,
+    '*': 40,
+    '(': 50,
+    ')': 60,
+    '_': 70,
+    '+': 80,
+    '=': 90,
+    '@': 100,
+    '#': 200,
+    'n': 300,
+}
+
 function pushByTens(val: number, arr: string[][]) : Function[]{
     return [
         () => arr[0].push(val.toString()),
@@ -107,11 +124,19 @@ export function serialize(arr: number[]) : string {
 
 export function deserialize(str: string) : number[] {
     const arr : number[] = [];
-    const splittedStr = str.split('\,');
-    for(let i : number = 0; i < splittedStr.length; i++){
-        // if(splittedStr[i] === ',')
-        //     continue
-        arr.push(splittedStr[i].charCodeAt(0));
+    let currentSym = '';
+    let currentVal = 0;
+    for(let i : number = 0; i < str.length; i++){
+        if(Object.keys(symMap).includes(str[i])){
+            currentSym = str[i];
+            currentVal += symMap[currentSym as keyof object]
+        }
+        while(!Object.keys(symMap).includes(str[i])){
+            console.log(symMap[currentSym as keyof object] + parseInt(str[i]))
+            arr.push(symMap[currentSym as keyof object] + parseInt(str[i]));
+            i++;
+        }
+        currentVal = 0;
     }
     return arr;
 }
