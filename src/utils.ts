@@ -4,8 +4,7 @@ interface IPreserialized extends Array<string[][]>{
     2: string[][]
 }
 
-const symMap : object = {
-    '!': 0,
+const symMap : Record<string, number> = {
     '$': 0,
     '%': 10,
     '^': 20,
@@ -35,110 +34,6 @@ function pushByTens(val: number, arr: string[][]) : Function[]{
         () => arr[9].push(val.toString()),
         () => arr[10].push(val.toString()),
     ]
-}
-
-export function serialize(arr: number[]) : string {
-    const preparedArr: IPreserialized = [
-        [
-            ['!$'],
-            ['%'],
-            ['^'],
-            ['&'],
-            ['*'],
-            ['('],
-            [')'],
-            ['_'],
-            ['+'],
-            ['=']
-        ],
-        [
-            ['@$'],
-            ['%'],
-            ['^'],
-            ['&'],
-            ['*'],
-            ['('],
-            [')'],
-            ['_'],
-            ['+'],
-            ['=']
-        ],
-        [
-            ['#$'],
-            ['%'],
-            ['^'],
-            ['&'],
-            ['*'],
-            ['('],
-            [')'],
-            ['_'],
-            ['+'],
-            ['='],
-            ['n']
-        ]
-    ];
-
-    arr.sort((a, b) => a - b);
-    try{
-        for(let i: number = 0; i < arr.length; i++){
-
-            if(arr[i] > 0 && arr[i] < 100){
-                pushByTens(arr[i] % 10, preparedArr[0])[Math.floor(arr[i] / 10)]();
-            }
-            if(arr[i] > 99 && arr[i] < 200){
-                pushByTens(arr[i] % 100 % 10, preparedArr[1])[Math.floor((arr[i] - 100) / 10)]();
-            }
-            if(arr[i] > 199 && arr[i] <= 300){
-                pushByTens(arr[i] % 200 % 10, preparedArr[2])[Math.floor((arr[i] - 200) / 10)]();
-            }
-        }
-    }catch(e){
-        console.log(e);
-        debugger;
-    }
-    // Array(preparedArr[0]).forEach(el => {
-    //     el[0].forEach(strings => {
-    //         if(strings.length === 1){
-    //             el[0].splice(Array.prototype.indexOf(strings), 1)
-    //         }
-    //     })
-    // });
-    // Array(preparedArr[1]).forEach(el => {
-    //     el[0].forEach(strings => {
-    //         if(strings.length === 1){
-    //             el[0].splice(Array.prototype.indexOf(strings), 1);
-    //         }
-    //     })
-    // });
-    // Array(preparedArr[2]).forEach(el => {
-    //     el[0].forEach(strings => {
-    //         if(strings.length === 1){
-    //             el[0].splice(Array.prototype.indexOf(strings), 1);
-    //         }
-    //     })
-    // });
-        
-
-    return (preparedArr[0].join(',') + preparedArr[1].join(',') + preparedArr[2].join(',')).replace(/\,/g, '');
-}
-
-export function deserialize(str: string) : number[] {
-    const arr : number[] = [];
-    let currentSym = '';
-    let currentVal = 0;
-    for(let i : number = 0; i < str.length; i++){
-        if(Object.keys(symMap).includes(str[i])){
-            currentSym = str[i];
-            currentVal += symMap[currentSym as keyof object]
-        }
-        while(!Object.keys(symMap).includes(str[i])){
-            console.log(symMap[currentSym as keyof object] + parseInt(str[i]))
-            arr.push(symMap[currentSym as keyof object] + parseInt(str[i]));
-            i++;
-        }
-        currentVal = 0;
-    }
-    return arr;
 }
 
 export function createArray(len: number, max: number, min: number, step: number = 1, needRandom: boolean = true): number[] {
@@ -172,4 +67,103 @@ export function createArray(len: number, max: number, min: number, step: number 
     }
 
     return generatedNumbers;
+}
+
+export function serialize(arr: number[]) : string {
+    const preparedArr: IPreserialized = [
+        [
+            ['$'],
+            ['%'],
+            ['^'],
+            ['&'],
+            ['*'],
+            ['('],
+            [')'],
+            ['_'],
+            ['+'],
+            ['=']
+        ],
+        [
+            ['@', '$'],
+            //['$'],
+            ['%'],
+            ['^'],
+            ['&'],
+            ['*'],
+            ['('],
+            [')'],
+            ['_'],
+            ['+'],
+            ['=']
+        ],
+        [
+            ['#', '$'],
+            //['$'],
+            ['%'],
+            ['^'],
+            ['&'],
+            ['*'],
+            ['('],
+            [')'],
+            ['_'],
+            ['+'],
+            ['='],
+            ['n']
+        ]
+    ];
+
+    arr.sort((a, b) => a - b);
+    try{
+        for(let i: number = 0; i < arr.length; i++){
+            if(arr[i] > 0 && arr[i] < 100){
+                pushByTens(arr[i] % 10, preparedArr[0])[Math.floor(arr[i] / 10)]();
+            }
+            if(arr[i] > 99 && arr[i] < 200){
+                pushByTens(arr[i] % 100 % 10, preparedArr[1])[Math.floor((arr[i] - 100) / 10)]();
+            }
+            if(arr[i] > 199 && arr[i] <= 300){
+                pushByTens(arr[i] % 200 % 10, preparedArr[2])[Math.floor((arr[i] - 200) / 10)]();
+            }
+        }
+    }catch(e){
+        console.log(e);
+        debugger;
+    }   
+
+    preparedArr.forEach((hundreds, hInx) => {
+        hundreds.forEach((tens, tInx) => {
+            if(hInx > 0 && tInx === 0){
+                return;
+            }
+            if((tens.length <= 1)){
+                hundreds.splice(hundreds.indexOf(tens), 1, []);
+            }
+        })
+        console.log(hundreds)
+    })
+
+    return (preparedArr[0].join(',') + preparedArr[1].join(',') + preparedArr[2].join(',')).replace(/\,/g, '');
+}
+
+export function deserialize(str: string) : number[] {
+    const arr : number[] = []; 
+    let currentHundreds : number = 0;
+    let currentTens : number = 0;
+
+    for(let i : number = 0; i < str.length; i++){
+        
+        if(['@', '#'].includes(str[i])){
+            currentHundreds = symMap[str[i]];
+            continue;
+        }else if(Object.keys(symMap).includes(str[i])){
+            currentTens = symMap[str[i]];
+        }
+
+        if(isNaN(parseInt(str[i]) + currentHundreds + currentTens)){
+            continue;
+        } 
+        arr.push(parseInt(str[i]) + currentHundreds + currentTens);
+    }
+    
+    return arr;
 }
