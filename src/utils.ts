@@ -113,7 +113,6 @@ export function serialize(arr: number[]) : string {
     ];
 
     arr.sort((a, b) => a - b);
-    try{
         for(let i: number = 0; i < arr.length; i++){
             if(arr[i] > 0 && arr[i] < 100){
                 pushByTens(arr[i] % 10, preparedArr[0])[Math.floor(arr[i] / 10)]();
@@ -125,10 +124,6 @@ export function serialize(arr: number[]) : string {
                 pushByTens(arr[i] % 200 % 10, preparedArr[2])[Math.floor((arr[i] - 200) / 10)]();
             }
         }
-    }catch(e){
-        console.log(e);
-        debugger;
-    }   
 
     preparedArr.forEach((hundreds, hInx) => {
         hundreds.forEach((tens, tInx) => {
@@ -139,7 +134,6 @@ export function serialize(arr: number[]) : string {
                 hundreds.splice(hundreds.indexOf(tens), 1, []);
             }
         })
-        console.log(hundreds)
     })
 
     return (preparedArr[0].join(',') + preparedArr[1].join(',') + preparedArr[2].join(',')).replace(/\,/g, '');
