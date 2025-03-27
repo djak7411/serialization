@@ -151,8 +151,8 @@ export function deserialize(str: string) : number[] {
     let currentTens : number = 0;
 
     for(let i : number = 0; i < str.length; i++){
-        
-        if(['@', '#'].includes(str[i])){
+        if(['@', '#', 'n'].includes(str[i])){
+            currentTens = 0;
             currentHundreds = symMap[str[i]];
             continue;
         }else if(Object.keys(symMap).includes(str[i])){
@@ -161,7 +161,8 @@ export function deserialize(str: string) : number[] {
 
         if(isNaN(parseInt(str[i]) + currentHundreds + currentTens)){
             continue;
-        } 
+        }
+        
         arr.push(parseInt(str[i]) + currentHundreds + currentTens);
     }
     
