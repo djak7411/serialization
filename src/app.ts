@@ -5,8 +5,9 @@ const addCSS = (css: any) => document.head.appendChild(document.createElement("s
 addCSS(`
         pre {
             margin: 16px;
-             word-break: break-all;
-             max-width: 100%;
+            word-break: break-all;
+            max-width: 100%;
+            overflow: auto;
         }
         div {
             display: flex;
