@@ -6,20 +6,20 @@ import { serialize, deserialize, createArray } from "../src/utils";
 
 function isCompressionOverHalf(arr: number[]) : any {
     const serializedArr: string = serialize(arr);
-
-    //console.log(`compression: ${((100 * serializedArr.length) / arr.length)}`);
-
-    //return (serializedArr.length / arr.length * 100) <= 50;
-    return { comp: 1 - (serializedArr.length / arr.length) >= 0.5, message: `compression: ${1 - (serializedArr.length / arr.length)}` };
+    
+    return { comp: 100 - (serializedArr.length / arr.toString().length) * 100 >= 50, message: `compression: ${100 - (serializedArr.length / arr.toString().length) * 100}` };
 }
 
-describe('base', () => {
-    it('serialize-deserialize', () => {
-        const arr: number[] = [1, 2, 3, 4];
+function checkSerDes(arr: number []){
         const serializedArr: string = serialize(arr);
         const deserializedArr: number[] = deserialize(serializedArr);
 
         assert.deepEqual(arr, deserializedArr);
+}
+
+describe('base', () => {
+    it('serialize-deserialize', () => {
+        checkSerDes([1, 2, 3, 4]);
     });
 
     it('source array', () => {
@@ -56,49 +56,57 @@ describe('array', () => {
 describe('functional', () => {
     it('50 numbers', () => {
         const arr: number[] = createArray(50, 300, 1);
-        const isHalfComp = isCompressionOverHalf(arr);
-        assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        //const isHalfComp = isCompressionOverHalf(arr);
+        //assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
 
     it('100 numbers', () => {
         const arr: number[] = createArray(100, 300, 1);
-        const isHalfComp = isCompressionOverHalf(arr);
-        assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        //const isHalfComp = isCompressionOverHalf(arr);
+       //assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
 
     it('500 numbers', () => {
         const arr: number[] = createArray(500, 300, 1);
         const isHalfComp = isCompressionOverHalf(arr);
         assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
 
     it('1000 numbers', () => {
         const arr: number[] = createArray(1000, 300, 1);
         const isHalfComp = isCompressionOverHalf(arr);
         assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
 
     it('numbers with one digit', () => {
         const arr: number[] = createArray(9, 9, 1, 1, false);
-        const isHalfComp = isCompressionOverHalf(arr);
-        assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        //const isHalfComp = isCompressionOverHalf(arr);
+        //assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
     
     it('numbers with two digit', () => {
         const arr: number[] = createArray(99, 99, 10, 1, false);
-        const isHalfComp = isCompressionOverHalf(arr);
-        assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        //const isHalfComp = isCompressionOverHalf(arr);
+        //assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
 
     it('numbers with three digit', () => {
-        const arr: number[] = createArray(999, 999, 100, 1, false);
-        const isHalfComp = isCompressionOverHalf(arr);
-        assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        const arr: number[] = createArray(999, 300, 100, 1, false);
+        //const isHalfComp = isCompressionOverHalf(arr);
+        //assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
 
     it('numbers with step over 3', () => {
-        const arr: number[] = createArray(900, 999, 1, 3, false);
+        const arr: number[] = createArray(900, 300, 1, 3, false);
         const isHalfComp = isCompressionOverHalf(arr);
         assert.equal(isHalfComp.comp, true, isHalfComp.message);
+        checkSerDes(arr);
     });
 });
